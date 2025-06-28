@@ -1,7 +1,7 @@
 # group7_Capstone is repository of capstone project of group 7 for AIMLOps PG advanced certification IISc
 # Gemini Fullstack LangGraph Quickstart
 
-This project demonstrates a fullstack application using a React frontend and a LangGraph-powered backend agent. The agent is designed to perform comprehensive research on a user's query by dynamically generating search terms, querying the web using Google Search, reflecting on the results to identify knowledge gaps, and iteratively refining its search until it can provide a well-supported answer with citations. This application serves as an example of building research-augmented conversational AI using LangGraph and Google's Gemini models.
+This project demonstrates a fullstack application using a React frontend and a LangGraph-powered backend agent. The agent is designed to perform comprehensive research on a user's query by dynamically generating search terms, querying the web using Google Search, reflecting on the results to identify knowledge gaps, and iteratively refining its search until it can provide a well-supported answer with citations. This application serves as an example of building research-augmented conversational AI using LangGraph and InvestLM-mistral model.
 
 <img src="./app.png" title="Gemini Fullstack LangGraph" alt="Gemini Fullstack LangGraph" width="90%">
 
@@ -9,7 +9,7 @@ This project demonstrates a fullstack application using a React frontend and a L
 
 - 💬 Fullstack application with a React frontend and LangGraph backend.
 - 🧠 Powered by a LangGraph agent for advanced research and conversational AI.
-- 🔍 Dynamic search query generation using Google Gemini models.
+- 🔍 Dynamic financial search query generation using InvestLM-mistral model.
 - 🌐 Integrated web research via Google Search API.
 - 🤔 Reflective reasoning to identify knowledge gaps and refine searches.
 - 📄 Generates answers with citations from gathered sources.
@@ -30,10 +30,10 @@ Follow these steps to get the application running locally for development and te
 
 -   Node.js and npm (or yarn/pnpm)
 -   Python 3.11+
--   **`GEMINI_API_KEY`**: The backend agent requires a Google Gemini API key.
+-   **`MISTRAL_API_KEY`**: The backend agent requires a Mistral API key.
     1.  Navigate to the `backend/` directory.
     2.  Create a file named `.env` by copying the `backend/.env.example` file.
-    3.  Open the `.env` file and add your Gemini API key: `GEMINI_API_KEY="YOUR_ACTUAL_API_KEY"`
+    3.  Open the `.env` file and add your Gemini API key: `MISTRAL_API_KEY="YOUR_ACTUAL_API_KEY"`
 
 **2. Install Dependencies:**
 
@@ -103,7 +103,7 @@ _Note: If you are not running the docker-compose.yml example or exposing the bac
 **2. Run the Production Server:**
 
    ```bash
-   GEMINI_API_KEY=<your_gemini_api_key> LANGSMITH_API_KEY=<your_langsmith_api_key> docker-compose up
+   MISTRAL_API_KEY=<your_mistral_api_key> LANGSMITH_API_KEY=<your_langsmith_api_key> docker-compose up
    ```
 
 Open your browser and navigate to `http://localhost:8123/app/` to see the application. The API will be available at `http://localhost:8123`.
