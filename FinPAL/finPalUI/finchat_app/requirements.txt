@@ -1,0 +1,17 @@
+chainlit
+fastapi
+uvicorn
+langchain-openai
+langchain
+langchain-community
+langchain-core==0.3.67
+langchain-mistralai==0.2.10
+python-dotenv>=1.0.0
+pandas>=2.0.0
+llama-cpp-python
+opensearch-py
+requests-aws4auth
+boto3
+sentence-transformers
+langchain-huggingface
+prometheus-fastapi-instrumentator

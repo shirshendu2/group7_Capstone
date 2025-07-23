@@ -1,0 +1,14 @@
+#my global config 
+global: 
+  scrape_interval: 20s    # Set the scrape interval to every 20 seconds. Default is every 1 minute. 
+  evaluation_interval: 20s  # Evaluate rules every 20 seconds. The default is every 1 minute. 
+# scrape_timeout is set to the global default (10s). 
+# A scrape configuration containing exactly one endpoint to scrape: 
+scrape_configs: 
+# The job name is added as a label `job=<job_name>` to any timeseries scraped from this config. 
+  - job_name: "finpal_app"  # Name of the job for this scrape configuration
+    metrics_path: "/metrics"  # The path to the metrics endpoint
+    scrape_interval: 10s  # Scrape interval for this job
+    scrape_timeout: 10s  # Timeout for scraping this job
+    static_configs:
+        - targets: ["3.7.20.206:8000"]  # Replace with your app's host and port
