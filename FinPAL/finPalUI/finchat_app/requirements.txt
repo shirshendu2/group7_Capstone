@@ -14,4 +14,4 @@ requests-aws4auth
 boto3
 sentence-transformers
 langchain-huggingface
-prometheus_client
+prometheus-fastapi-instrumentator
