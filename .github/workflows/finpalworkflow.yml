@@ -5,13 +5,48 @@ on:
   pull_request:
     branches: [ "main" ]
 
+env:
+  EC2_HOST: ${{ secrets.EC2_HOST }}
+  EC2_USER: ${{ secrets.EC2_USER }}
+  SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+  IMAGE_TAG: "finpalopensearch:latest"
+
 jobs:
-  Deploy-FinPal:
-    uses: mmathen/group7_Capstone_llmExplore/.github/workflows/finpalworkflow.yml@main
-    secrets:
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_REGION: ${{ secrets.AWS_REGION }}
-      EC2_HOST: ${{ secrets.EC2_HOST }}
-      EC2_USER: ${{ secrets.EC2_USER }}
-      EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+#  Deploy-FinPal:
+#    uses: mmathen/group7_Capstone_llmExplore/.github/workflows/finpalworkflow.yml@main
+#    secrets:
+#      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#      AWS_REGION: ${{ secrets.AWS_REGION }}
+#      EC2_HOST: ${{ secrets.EC2_HOST }}
+#      EC2_USER: ${{ secrets.EC2_USER }}
+#      EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Deploy image on EC2
+      run: |
+        echo "${SSH_KEY}" > key.pem
+        chmod 600 key.pem
+        cat key.pem
+
+        ssh -o StrictHostKeyChecking=no -i key.pem ${EC2_USER}@${EC2_HOST} << EOF
+          #aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}
+          #docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          #sudo docker stop FinPalOpenSearch || true
+          #sudo docker rm FinPalOpenSearch || true
+          #sudo docker run -d --name "FinPalOpenSearch" -p 8000:8000 $IMAGE_TAG
+          sudo docker start FinPalOpenSearch || true
+          sleep 10
+          sudo docker ps
+          sudo docker start prom_cont || true
+          sleep 5
+          sudo docker ps
+          sudo docker start grafana_cont || true
+          sleep 5
+          sudo docker ps
+        EOF
