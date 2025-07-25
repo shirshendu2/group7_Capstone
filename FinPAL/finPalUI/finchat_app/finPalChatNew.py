@@ -14,12 +14,24 @@ from langchain_huggingface import HuggingFaceEmbeddings
 from langchain.chains import RetrievalQA
 from requests_aws4auth import AWS4Auth
 import boto3
+from prometheus_client import Counter, Histogram
+import time
 
 # --- 0. Pre-Steps ---
 load_dotenv()
 MISTRAL_API_KEY = os.getenv('MISTRAL_API_KEY')
 if not MISTRAL_API_KEY:
     raise ValueError("MISTRAL_API_KEY environment variable not set. Please create a .env file with your Mistral API key.")
+
+# Metric: Count user queries processed by the LLM
+llm_user_queries_total = Counter(
+    'llm_user_queries_total',
+    'Total number of user queries processed by the LLM'
+)
+llm_response_latency_seconds = Histogram(
+    'llm_response_latency_seconds',
+    'Time taken for LLM to generate a response (seconds)'
+)
 
 # --- For RAG set up ---
 # Initialize the HuggingFace embeddings model
@@ -268,6 +280,9 @@ class FinPalAgent:
         Processes a single user query in a multi-turn chat.
         Maintains continuous chat_history.
         """
+        # Increment Prometheus metric for each user query
+        llm_user_queries_total.inc()
+        start_time = time.time()  # Start timer
         if verbose:
             print(f"\n--- User: {user_query} ---")
 
@@ -306,9 +321,13 @@ class FinPalAgent:
         elif final_answer_received and not isinstance(self.chat_history[-1], AIMessage):
             self.chat_history.append(AIMessage(content=response_content))
 
+        latency = time.time() - start_time  # End timer
+        llm_response_latency_seconds.observe(latency)
+
         if verbose:
             print(f"\n--- FinPal Agent Final Response for this turn: ---")
             print(response_content)
+            print(f"Response latency: {latency:.3f} seconds")
         
         return response_content
 

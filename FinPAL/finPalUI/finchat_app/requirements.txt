@@ -15,3 +15,4 @@ boto3
 sentence-transformers
 langchain-huggingface
 prometheus-fastapi-instrumentator
+prometheus_client>=0.19.0
