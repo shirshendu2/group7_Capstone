@@ -23,7 +23,8 @@ jobs:
 #      EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
 
   deploy:
-    runs-on: finPAL-runner
+    #runs-on: finPAL-runner
+    runs-on: self-hosted
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
